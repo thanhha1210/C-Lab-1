@@ -1,0 +1,22 @@
+1. What does s, n and b and do in gdb?
+- s = step: allow to step through peogram line by line while entering functions.
+- n = next: it executes the current line & stop at the next line in the current function, 
+            w/o entering any called functions
+- b = break: used to set breakpoints in the program.
+
+2. Show me how to use s, n and b in gdb?
+gdb ./my_program
+Set break point: (gdb) b main -> set break point at the start of main function
+Run the program: (gdb) run -> now, the program will stop at the main function
+Use s to stop into the function & exe program line by line: (gdb) s
+Skip over a function & just execute the current line & go to next one, use: (gdb) n
+
+3. Run program
+gcc -g -Wall -std=c99 -o lab1.bin lab1.c
+    -g tells the compiler to include debugging symbols; needed for using gdb to debug your code.
+    -Wall says to print warnings for all types of potential problems
+    -std=c99 says to use the C99 standard (now only 19 years old!)
+    -o lab1.bin instructs the compiler to output the executable code to a file named lab1.bin
+    lab1.c is the source file being compiled.
+ 
+lab1.bin file is an executable file, which you can run using the command ./lab1.bin. 

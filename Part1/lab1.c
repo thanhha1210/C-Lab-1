@@ -61,7 +61,7 @@ void part1() {
 
   // Q1: The following line is an example. Feel free to
   // copy and/or modify it as needed for part 1 of this lab.
-  printf("x & x = %i\n %x", x & x, &x);
+  printf("x & x = %i\n %p\n", x & x, &x);    // %p for pointer format
 }
 
 // HELPER FUNCTION - fillArray()
@@ -75,9 +75,7 @@ void part1() {
 // but for now it is enough to understand that "array" is an
 // array of ints.
 void fillArray(int *array, int len) {
-  printf("Filling an array at address %p with %d "
-         "values\n",
-         array, len);
+  printf("Filling an array at address %p with %d values\n", array, len);
   for (int i = 0; i < len; ++i) {
     array[i] = i * 3 + 2;
     // assert() verifies that the given condition is true
@@ -108,6 +106,8 @@ void part2() {
 
   // Q2.1: What happens if the second argument is greater
   // than the size of the array (10)?
+
+  // Ans: It will have undefined behaviors (e.g: segment fault, garbage data, corrupt memory, ...)
   fillArray(array, 10);
 
   int value = 295;
@@ -121,6 +121,9 @@ void part2() {
   // as if it were an array of a single element. What data
   // is stored in value after the following code executes?
   // Explain why the result is what it is.
+
+  // Ans: value will store 2, b/c fillArray treats address of value as an array and sets its 1st element to 2. 
+  // Add: If I write fillArray(&value, 2), then can have undefined behavior, b/c want to write the next memory location after value, but doesn't know if sb holds that.
   fillArray(&value, 1);
 }
 
@@ -185,6 +188,24 @@ void part3() {
   // generally improve readability.
 
   // assert( student == 8 );
+
+  /* Ans 1: Explain
+    ((int *)&student) is now an int * that points to the first int in the struct (hw)
+    (int *)&student)[2] -> array indexing on this pointer, moves pointer 2 int positions forward
+  */  
+  assert(((int *)&student)[2] == 8 ); 
+
+
+  /* Ans 2: Explain
+    &sutdnet is the addr of Student struct -> type Scores*.
+    (int*)&student cast the address of student struct into an int* -> pointer is new 
+      treated as it points to an array of int s. 
+    (int*)&student + 2 -> pointer arthm, moves pointer by 2 int forward (8 bytes) -> 
+      pointer points to 3rd int in the struct (midterm)
+    *(((int *)&student) + 2) -> deref the pointers, mean access value of midterm 
+
+  */
+  assert(*(((int *)&student) + 2) == 8 ); 
 }
 
 // HELPER FUNCTION - bigArrayIndex()
@@ -220,13 +241,25 @@ void part4() {
   // Q4.1: Try changing the order of the loops (switch the
   // "for" lines). The original ordering below is
   // considered "ijk".  Which loop orderings are fastest?
-  for (int i = 0; i < SIZE; i++) {
-    for (int j = 0; j < SIZE; j++) {
-      for (int k = 0; k < SIZE; k++) {
-        bigArray[bigArrayIndex(i, j, k)] = i + j + k;
-      }
-    }
-  }
+
+  // Ans: Loop i j k is fastest, why?
+
+ 
+  // for (int i = 0; i < SIZE; i++) {
+  //   for (int j = 0; j < SIZE; j++) {
+  //     for (int k = 0; k < SIZE; k++) {
+  //       bigArray[bigArrayIndex(i, j, k)] = i + j + k;
+  //     }
+  //   }
+  // }
+   
+    for (int i = 0; i < SIZE; i++)
+      for (int j = 0; j < SIZE; j++) 
+        for (int k = 0; k < SIZE; k++) 
+          bigArray[bigArrayIndex(i, j, k)] = i + j + k;
+
+  
+
 
   // stop timer and print result
   printf("Approximate runtime = %d\n", (int)(clock() - timer));

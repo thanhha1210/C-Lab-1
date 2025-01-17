@@ -68,6 +68,7 @@ int insert_end(struct list *l, int val)
   {
     n->prev = l->last;
     n->next = NULL;
+    l->last->next = n;  // Add update the node before last node
     l->last = n;
   }
   else
@@ -88,6 +89,7 @@ int insert_after(struct list *l, struct node *n, int val)
     return 0;
   m->val = val;
   m->next = n->next;
+  m->prev = n;  // ADDED
   if (l->last == n)
     l->last = m;
   else
